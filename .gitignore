@@ -1,0 +1,33 @@
+# venv
+venv/
+.venv/
+
+# python cache
+__pycache__/
+*.pyc
+
+# secrets
+.env
+.env.*
+cookies*.txt
+
+# outputs / downloads
+downloads/
+output/
+*.mp4
+*.mp3
+*.webm
+
+# logs
+*.log
+
+# editors
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+.pytest_cache/
+temp/

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🎬 Веб-бот | YouTube и TikTok</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ request.url_for('static', path='css/main.css') }}"
+    />
+  </head>
+  <body class="min-h-screen bg-slate-900 text-slate-100">
+    <main class="mx-auto w-full max-w-3xl px-4 py-12">
+      <section class="space-y-4 text-center">
+        <h1 class="text-3xl font-semibold">🎬 Веб-бот для скачивания видео</h1>
+        <p class="text-slate-300">
+          Вставьте ссылку на ролик YouTube или TikTok и выберите, что скачать.
+        </p>
+      </section>
+
+      <form
+        id="download-form"
+        class="mt-10 space-y-6 rounded-lg bg-slate-800/80 p-6 shadow-lg"
+      >
+        <div class="text-left">
+          <label for="media-url" class="block text-sm font-medium text-slate-300"
+            >Ссылка на видео</label
+          >
+          <input
+            id="media-url"
+            name="url"
+            type="url"
+            required
+            placeholder="https://www.youtube.com/watch?v=..."
+            class="mt-2 w-full rounded-md border border-slate-700 bg-slate-900 px-4 py-2 text-slate-100 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50"
+          />
+        </div>
+
+        <fieldset class="text-left">
+          <legend class="text-sm font-semibold text-slate-300">
+            Формат скачивания
+          </legend>
+          <div class="mt-3 flex flex-wrap items-center gap-4">
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" name="format" value="mp4" checked />
+              <span>MP4 (видео)</span>
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" name="format" value="mp3" />
+              <span>MP3 (аудио)</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="text-left">
+          <legend class="text-sm font-semibold text-slate-300">
+            Качество видео (для MP4)
+          </legend>
+          <select
+            id="quality"
+            name="quality"
+            class="mt-2 w-full rounded-md border border-slate-700 bg-slate-900 px-4 py-2 text-slate-100 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50"
+          >
+            <option value="auto">Авто</option>
+            <option value="720p" selected>720p</option>
+            <option value="1024p">1024p (Full HD)</option>
+            <option value="480p">480p</option>
+            <option value="360p">360p</option>
+          </select>
+        </fieldset>
+
+        <div class="text-left">
+          <label class="block text-sm font-medium text-slate-300 mb-1"
+            >Формат</label
+          >
+          <select
+            id="format"
+            class="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100"
+          >
+            <option value="mp4">MP4 (видео)</option>
+            <option value="webm">WEBM (видео)</option>
+            <option value="mkv">MKV (контейнер)</option>
+            <option value="mp3">MP3 (аудио)</option>
+            <option value="m4a">M4A (аудио)</option>
+            <option value="ogg">OGG (аудио)</option>
+            <option value="source">Оригинал (без конвертации)</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full rounded-md bg-indigo-500 px-4 py-2 text-lg font-semibold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+        >
+          Скачать
+        </button>
+      </form>
+
+      <section
+        id="job-panel"
+        aria-live="polite"
+        class="mt-8 hidden space-y-4 rounded-md border border-slate-700 bg-slate-800/60 p-4 text-left text-sm"
+      >
+        <div id="status-message" class="font-medium text-slate-200"></div>
+
+        <div id="meta" class="hidden text-slate-300">
+          <div class="text-xs uppercase tracking-wide text-slate-400">
+            Метаданные видео
+          </div>
+          <dl class="mt-2 space-y-2">
+            <div>
+              <dt class="font-semibold text-slate-200">Название</dt>
+              <dd id="meta-title" class="text-slate-300"></dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-slate-200">Длительность</dt>
+              <dd id="meta-duration" class="text-slate-300"></dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-slate-200">Оценочный размер</dt>
+              <dd id="meta-size" class="text-slate-300"></dd>
+            </div>
+          </dl>
+          <div id="meta-thumbnail" class="mt-3"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Прогресс</span>
+            <span id="progress-value">0%</span>
+          </div>
+          <div class="mt-2 h-2 w-full overflow-hidden rounded bg-slate-700">
+            <div
+              id="progress-bar"
+              class="h-full w-0 bg-indigo-400 transition-all duration-300"
+            ></div>
+          </div>
+        </div>
+
+        <div id="result"></div>
+      </section>
+    </main>
+
+    <script defer src="{{ request.url_for('static', path='js/app.js') }}"></script>
+  </body>
+</html>

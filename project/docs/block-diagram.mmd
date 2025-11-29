@@ -1,0 +1,28 @@
+```mermaid
+graph TD
+    U[Browser UI<br/>templates/index.html<br/>static/js/app.js] -->|HTTP| API[FastAPI App<br/>project/app/main.py]
+    API -->|Routes| ROUTES[Download API<br/>project/app/routes/download.py]
+    API -->|Config & Logging| CFG[Settings & Logging<br/>config.py / logging.py / .env]
+    API -->|Templates & Static| ASSETS[Frontend Assets<br/>templates + static/]
+
+    ROUTES -->|Create Jobs| JOBS[Job Abstraction<br/>utils/jobs.py]
+    JOBS -->|Memory Queue| MEM[In-memory Backend<br/>utils/jobs_memory.py]
+    JOBS -->|Redis Queue| RQ[Redis/RQ Backend<br/>utils/jobs_rq.py]
+
+    MEM --> WORKER{{Async Worker<br/>main.start_worker}}
+    RQ --> EXTWORKER{{RQ Worker Process<br/>app/worker.py}}
+
+    ROUTES -->|Media Ops| SERVICES[Services<br/>app/services/]
+    SERVICES --> DL[downloader.py<br/>yt-dlp probe/download]
+    SERVICES --> CV[converter.py<br/>ffmpeg convert]
+
+    WORKER --> TMP[(TMP_DIR<br/>temp/)]
+    EXTWORKER --> TMP
+    ROUTES -->|Serve Files| TMP
+    TMP --> CLEAN[Cleanup Tasks<br/>utils/cleanup.py]
+
+    ROUTES -->|Rate limit| RL[utils/ratelimit.py]
+    ROUTES -->|Paths/MIME| PATHS[utils/paths.py]
+
+    API --> TESTS[Tests<br/>project/tests/*]
+```
