@@ -1,2 +1,3 @@
 # youtube-tiktok-downloader.
-A website for automatically downloading videos from YouTube and TikTok using the provided link.
+Web app to download video/audio from YouTube & TikTok. Job/status flow, FastAPI backend.
+Topics: python, fastapi, yt-dlp, downloader, api, async
